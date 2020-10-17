@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import * as db from './data'
 
 class AddContact extends Component {
 
@@ -19,13 +20,16 @@ class AddContact extends Component {
     }
 
     save = () => {
-       //contactData.push({...this.state})
+       db.addContact(this.state)
        this.props.close()
     }
 
 
     render(){
         return <div className = "container filter-form">
+            <h4>კონტაქტის დამატება</h4>
+            <hr />
+            <br />
             <form>
                 <div className="form-group">
                     <label htmlFor="exampleInputEmail1">დასახელება</label>
