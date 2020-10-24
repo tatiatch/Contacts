@@ -44,7 +44,7 @@ class App extends React.Component {
   }
 
   handleRemoveContact = (id) => {
-    console.log('id', id)
+    //console.log('id', id)
   }
 
   hendleShowAddForm = () => {
@@ -71,7 +71,6 @@ class App extends React.Component {
           <ContactList
             contacts={this.state.contacts}
             handleRemoveContact={this.handleRemoveContact}
-            
           />
         )}
       </>
