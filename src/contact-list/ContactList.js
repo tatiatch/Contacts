@@ -16,7 +16,6 @@ class ContactList extends Component{
                     <ContactListItem contact = { contact } removeContact = {this.props.handleRemoveContact} /> )
                 }
             </div>
-
         </div>
    }
 
