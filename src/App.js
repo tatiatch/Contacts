@@ -7,7 +7,6 @@ import * as db from './data'
 import './App.css'
 
 class App extends React.Component {
-
   state = {
     contacts: null,
     isEnable: true,
@@ -20,9 +19,19 @@ class App extends React.Component {
     this.setState({ contacts: data })
   }
 
-  // componentDidUpdate(){
-  //   console.log('componentDidUpdate')
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate', prevState, this.state)
+    if (prevState.searchValue !== this.state.searchValue) {
+      const data = db
+        .getContacts()
+        .filter((contact) =>
+          contact.name
+            .toUpperCase()
+            .includes(this.state.searchValue.toUpperCase())
+        )
+      this.setState({ contacts: data })
+    }
+  }
 
   handleClick = (id) => {
     const contactData = this.state.contacts.filter((x) => x.id !== id)
@@ -51,8 +60,13 @@ class App extends React.Component {
     this.setState({ addForm: true })
   }
 
-  handleAddContact = (contact)=>{
-    this.setState({contacts: [...this.state.contacts, contact]})
+  handleAddContact = (contact) => {
+    this.setState({ contacts: [...this.state.contacts, contact] })
+  }
+
+  onSearch = (e) => {
+    console.log('searchValue', e)
+    this.setState({ searchValue: e.target.value })
   }
 
   render() {
@@ -62,11 +76,13 @@ class App extends React.Component {
         <Search
           searchValue={this.state.searchValue}
           showAddForm={this.hendleShowAddForm}
+          handleSearch={this.onSearch}
         />
         {this.state.addForm ? (
-          <AddContact 
-          close={this.handleClose} 
-          handleAddContact = {this.handleAddContact}/>
+          <AddContact
+            close={this.handleClose}
+            handleAddContact={this.handleAddContact}
+          />
         ) : (
           <ContactList
             contacts={this.state.contacts}

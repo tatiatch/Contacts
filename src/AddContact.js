@@ -3,7 +3,7 @@ import * as db from './data'
 
 class AddContact extends Component {
   state = {
-    id: 33,
+    id: Date.now(),
     name: '',
     phone: '',
     email: '',
@@ -15,9 +15,7 @@ class AddContact extends Component {
       {
         [name]: value,
       },
-      () => {
-        console.log('state', this.state)
-      }
+      () => {}
     )
   }
 
@@ -46,8 +44,8 @@ class AddContact extends Component {
               onChange={this.hanldeChange}
             />
           </div>
-          <div class='form-group'>
-            <label for='exampleInputPassword1'>ტელეფონი</label>
+          <div className='form-group'>
+            <label htmlFor='exampleInputPassword1'>ტელეფონი</label>
             <input
               type='text'
               className='form-control'
@@ -57,8 +55,8 @@ class AddContact extends Component {
               onChange={this.hanldeChange}
             />
           </div>
-          <div class='form-group'>
-            <label for='exampleInputPassword1'>ელ.ფოსტა</label>
+          <div className='form-group'>
+            <label htmlFor='exampleInputPassword1'>ელ.ფოსტა</label>
             <input
               type='text'
               className='form-control'
