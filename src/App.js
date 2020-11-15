@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from './Header'
 import ContactList from './contact-list/ContactList'
-import AddContact from './AddContact'
+import ContactForm from './AddEditContact'
 import Search from './search/Search'
 import * as db from './data'
 import './App.css'
@@ -11,7 +11,8 @@ class App extends React.Component {
     contacts: null,
     isEnable: true,
     searchValue: '',
-    addForm: false,
+    showForm: false,
+    editContactId: undefined,
   }
 
   componentDidMount() {
@@ -20,14 +21,16 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate', prevState, this.state)
     if (prevState.searchValue !== this.state.searchValue) {
+      // ძებნა. დააბრუნებს ისეთ კონტაქტებს რომლების ტელეფონი ან სახელი ან მეილი ემთხვევა საძიებო სიტყვას
       const data = db
         .getContacts()
         .filter((contact) =>
           contact.name
             .toUpperCase()
-            .includes(this.state.searchValue.toUpperCase())
+            .includes(this.state.searchValue.toUpperCase()) ||
+          contact.email.includes(this.state.searchValue) ||
+          contact.phone.includes(this.state.searchValue)
         )
       this.setState({ contacts: data })
     }
@@ -49,15 +52,25 @@ class App extends React.Component {
   }
 
   handleClose = () => {
-    this.setState({ addForm: false })
+    this.setState({ showForm: false })
   }
 
   handleRemoveContact = (id) => {
-    //console.log('id', id)
+    db.deleteContact(id);
+    const data = db.getContacts();
+    this.setState({ contacts: data });
+  }
+
+  handleShowEditForm = (id) => {
+    this.setState({ showForm: true, editContactId: id });
+  }
+
+  handleEditContact = (contact) => {
+    this.setState({ contacts: db.getContacts(), editContactId: undefined });
   }
 
   hendleShowAddForm = () => {
-    this.setState({ addForm: true })
+    this.setState({ showForm: true })
   }
 
   handleAddContact = (contact) => {
@@ -65,7 +78,6 @@ class App extends React.Component {
   }
 
   onSearch = (e) => {
-    console.log('searchValue', e)
     this.setState({ searchValue: e.target.value })
   }
 
@@ -78,15 +90,18 @@ class App extends React.Component {
           showAddForm={this.hendleShowAddForm}
           handleSearch={this.onSearch}
         />
-        {this.state.addForm ? (
-          <AddContact
+        {this.state.showForm ? (
+          <ContactForm
             close={this.handleClose}
             handleAddContact={this.handleAddContact}
+            handleEditContact={this.handleEditContact}
+            contactId={ this.state.editContactId }
           />
         ) : (
           <ContactList
             contacts={this.state.contacts}
             handleRemoveContact={this.handleRemoveContact}
+            showEditForm={this.handleShowEditForm}
           />
         )}
       </>

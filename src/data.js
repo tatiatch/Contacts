@@ -1,32 +1,28 @@
+export function getContacts(){
+    const contacts = JSON.parse(localStorage.getItem('contacts')) || []
+    return contacts
+}
 
-// const contactData = [
-//     {
-//       id: 1,
-//       name: 'Zaza Beridze',
-//       phone: '111111111',
-//       email: 'zaza@gmail.com'
-//     },
-//     {
-//       id: 2,
-//       name: 'Eka maisuradze',
-//       phone: '222222222',
-//       email: 'eka@gmail.com'
-//     },
-//     {
-//       id: 3,
-//       name: 'Nino Baratashvili',
-//       phone: '333333333',
-//       email: 'nino@gmail.com'
-//     }
-//   ]
+export function getContactById(contactId) {
+    const contacts = getContacts();
+    return contacts.find(contact => contact.id === contactId);
+}
 
-  export function getContacts(){
-     const contacts = JSON.parse(localStorage.getItem('contacts')) || []
-     return contacts
-  }
+export function addContact(contact){
+    const contacts = getContacts()
+    const contactArray = [...contacts, contact]
+    localStorage.setItem('contacts', JSON.stringify(contactArray))
+}
 
-  export function addContact(contact){
-      const contacts = getContacts()
-      const contactArray = [...contacts, contact]
-      localStorage.setItem('contacts', JSON.stringify(contactArray))
-  }
+export function editContact(newContact) {
+    const contacts = getContacts();
+    const contactIndex = contacts.findIndex(contact => contact.id === newContact.id);
+    contacts[contactIndex] = newContact;
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+}
+
+export function deleteContact(contactId) {
+    const contacts = getContacts();
+    const newContacts = contacts.filter(contact => contact.id !== contactId);
+    localStorage.setItem('contacts', JSON.stringify(newContacts));
+}
